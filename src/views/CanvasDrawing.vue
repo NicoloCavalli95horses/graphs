@@ -1,6 +1,6 @@
 <template>
   <canvas ref="canvas_ref" :width="WIDTH" :height="HEIGHT" />
-  <video :video_src="video_src" autoplay controls />
+  <video :src="video_src" autoplay controls />
   <Btn v-if="is_recording" class="rec-btn" :def="false" @click="stopRecording">Stop video</Btn>
   <Btn v-else class="rec-btn" :def="false" @click="startRecording">Start video</Btn>
 </template>
@@ -15,7 +15,10 @@ import {
   onMounted,
   onUnmounted,
 } from "vue";
-import { Screen, randInt } from "../utils/globals.mjs";
+import {
+  Screen,
+  randInt
+} from "../utils/globals.mjs";
 
 import Btn from "../components/Btn.vue";
 
@@ -24,9 +27,9 @@ import Btn from "../components/Btn.vue";
 //==================================
 const WIDTH      = Screen.yt_width / 2;
 const HEIGHT     = Screen.yt_height / 2;
+const FPS        = 20;
 const TOT_POINTS = 30;
 const W_SEGMENT  = WIDTH / TOT_POINTS;
-const FPS = 20;
 
 const ctx          = ref( undefined );
 const canvas_ref   = ref( undefined );
@@ -104,7 +107,6 @@ function setColor() {
   }
   return `rgb(${ rgb.red },${ rgb.green },${ rgb.blue })`;
 }
-
 
 function bounceToBoundaries( p ) {
   let has_bounced = false;
