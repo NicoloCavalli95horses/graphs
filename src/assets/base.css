@@ -1,0 +1,178 @@
+@import url("https://fonts.googleapis.com/css?family=MontSerrat&display=swap");
+
+:root {
+  /* LIGHT FLAMES */
+  --quartz: #171515;
+  --cardovan: rgba(87, 151, 240, 0.5);
+  --indian-red: rgb(59, 131, 233, 0.8);
+  --tulip: #f5918f;
+  --almond: #ebd4cc;
+
+  /* functional references */
+  --primary: var(--indian-red);
+  --primary-02: rgb(59, 131, 233, 0.2);
+  --secondary: var(--cardovan);
+  --footer-bg: var(--quartz);
+  --footer-bg-05: rgba(27, 35, 50, 0.5);
+  --background: var(--footer-bg);
+  --backdrop: rgba(255, 235, 210, 0.1);
+  --font-light: var(--almond);
+  --font-dark: var(--quartz);
+  --white: rgb(240, 240, 255);
+  --black: rgb(17, 17, 17);
+  --error-color: rgb(209, 44, 44);
+
+  --radius-xl: 2.6rem;
+  --radius-l: 1.8rem;
+  --radius-m: 1.2rem;
+  --radius-s: 0.6rem;
+
+  --transition-slow: 800ms;
+  --transition-medium: 400ms;
+  --transition-fast: 200ms;
+
+  --nav-height-desktop: 10rem;
+  --nav-height-mobile: 7rem;
+
+  --box-shadow: var(--black) 0px 2rem 3rem -1rem;
+  --box-shadow-nav: var(--black) 0px 0rem 3rem -1rem;
+  --box-shadow-footer: var(--black) 0px 0rem 3rem -1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* Root font-size: 1rem = 10px */
+html {
+  font-size: 10px;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background-color: var(--quartz);
+}
+
+
+/* Font */
+h1,
+h2,
+h3,
+h5,
+p,
+ul,
+li,
+a,
+span,
+input,
+textarea,
+summary,
+details {
+  font-family: "MontSerrat", sans-serif;
+}
+
+h1,
+h3,
+h4 {
+  font-family: "Signika Negative", sans-serif;
+}
+
+/* Color */
+h2,
+h3,
+h4,
+p,
+ul,
+li,
+a,
+span,
+summary,
+details {
+  color: var(--font-light);
+}
+
+h5,
+h6 {
+  color: var(--font-light);
+}
+
+h6 {
+  font-family: monospace;
+}
+
+/* Size */
+h1 {
+  color: var(--secondary);
+  font-size: clamp(3rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: 2.2rem;
+  color: var(--secondary);
+}
+
+h3 {
+  color: var(--secondary);
+  font-size: clamp(3rem, 5vw, 4rem);
+}
+
+h4 {
+  font-size: 1.8rem;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+h6 {
+  font-size: 1.2rem;
+}
+
+p,
+span,
+ul,
+li,
+a {
+  font-size: 1.4rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Code for Firefox */
+::-moz-selection {
+  color: var(--font-light);
+  background: var(--primary);
+}
+
+::selection {
+  color: var(--font-light);
+  background: var(--primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 0.3rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--font-dark);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
