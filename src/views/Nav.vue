@@ -1,7 +1,7 @@
 <template>
     <h1 class="title">Canvas drawings 🎨</h1>
     <nav>
-      <RouterLink to="/pendolum">
+      <RouterLink to="/drawing">
         <div class="row">
           <h2>Drawing</h2>
           <p>Experiment with bouncing shapes</p>
