@@ -361,3 +361,27 @@ svg {
   width: 2.4rem;
   height: 2.4rem;
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.toast-msg {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 12px;
+  background-color: #222;
+  border-radius: 12px;
+  border: 2px solid orangered;
+  animation: pulse 2s infinite;
+}

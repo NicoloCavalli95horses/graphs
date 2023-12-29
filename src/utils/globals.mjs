@@ -1,7 +1,7 @@
 //==================================
 // Const
 //==================================
-export const Screen = Object.freeze({
+export const SCREEN_SIZE = Object.freeze({
   yt_width: 1920,
   yt_height: 1080,
   instagram_reel_width: 1080,
@@ -21,14 +21,35 @@ export function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export function getRandomRGB() {
+  const rgb = {
+    red: randInt(0, 255),
+    green: randInt(100, 255),
+    blue: randInt(0, 255),
+  }
+  return `rgb(${ rgb.red },${ rgb.green },${ rgb.blue })`;
+}
+
+function downloadFile( src, filename = 'untitled', format ) {
+  const a = document.createElement('a')
+  a.href = src;
+  a.download = `${filename}.${format}`
+  a.click()
+}
+
+
+//==================================
+// Classes
+//==================================
 export class VideoRecorder {
   #VIDEO_OPTIONS;
-  constructor(canvasRef, fps, videoStream) {
+  constructor(canvasRef, fps) {
     this.canvasRef = canvasRef;
     this.fps = fps;
     this.videoStream = undefined;
     this.mediaRecorder = undefined;
     this.frames = [];
+    this.fps = 35;
     this.#VIDEO_OPTIONS = {
       mimeType: 'video/webm;codecs=vp9',
       videoBitsPerSecond: 5000000
@@ -65,9 +86,4 @@ export class VideoRecorder {
 }
 
 
-function downloadFile( src, filename = 'untitled', format ) {
-  const a = document.createElement('a')
-  a.href = src;
-  a.download = `${filename}.${format}`
-  a.click()
-}
+
