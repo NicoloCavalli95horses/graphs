@@ -7,7 +7,7 @@
 // Import
 //==================================
 import { ref, onMounted, onUnmounted } from "vue";
-import { Screen, VideoRecorder } from "../utils/globals.mjs";
+import { SCREEN_SIZE, VideoRecorder } from "../utils/globals.mjs";
 import { Canvas } from "../utils/canvasUtils.mjs";
 
 //==================================
