@@ -4,6 +4,8 @@
 export const Screen = Object.freeze({
   yt_width: 1920,
   yt_height: 1080,
+  instagram_reel_width: 1080,
+  instagram_reel_height: 1920,
 });
 
 
@@ -17,4 +19,55 @@ export function getRgb( rgb ) {
 
 export function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export class VideoRecorder {
+  #VIDEO_OPTIONS;
+  constructor(canvasRef, fps, videoStream) {
+    this.canvasRef = canvasRef;
+    this.fps = fps;
+    this.videoStream = undefined;
+    this.mediaRecorder = undefined;
+    this.frames = [];
+    this.#VIDEO_OPTIONS = {
+      mimeType: 'video/webm;codecs=vp9',
+      videoBitsPerSecond: 5000000
+    }
+  }
+
+  initRecord() {
+    this.videoStream = this.canvasRef.captureStream(this.fps);
+    this.mediaRecorder = new MediaRecorder(this.videoStream, this.#VIDEO_OPTIONS);
+    this.mediaRecorder.ondataavailable = (e) => this.frames.push(e.data);
+    this.mediaRecorder.onstop = () => this.handleStop();
+    this.startRecording();
+  }
+
+  startRecording() {
+    this.mediaRecorder.start();
+  }
+
+  stopRecording() {
+    this.mediaRecorder.stop();
+  }
+
+  getFrame() {
+    this.videoStream.getVideoTracks()[0].requestFrame();
+  }
+
+  handleStop() {
+    const blob = new Blob(this.frames, { type: 'video/mp4' });
+    const href = URL.createObjectURL(blob);
+    this.frames = [];
+    downloadFile(href, 'test', 'mp4');
+    URL.revokeObjectURL(href);
+  }
+}
+
+
+function downloadFile( src, filename = 'untitled', format ) {
+  const a = document.createElement('a')
+  a.href = src;
+  a.download = `${filename}.${format}`
+  a.click()
 }

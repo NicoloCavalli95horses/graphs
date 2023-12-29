@@ -1,8 +1,6 @@
 <template>
   <canvas ref="canvas_ref" :width="WIDTH" :height="HEIGHT" />
-  <video :src="video_src" autoplay controls />
-  <Btn v-if="is_recording" class="rec-btn" :def="false" @click="stopRecording">Stop video</Btn>
-  <Btn v-else class="rec-btn" :def="false" @click="startRecording">Start video</Btn>
+  <div class="toast-msg" :clas="{ 'fadein' : is_recording }"><p>Recording 📽️</p></div>
 </template>
 
 <script setup>
@@ -17,19 +15,18 @@ import {
 } from "vue";
 import {
   Screen,
-  randInt
+  randInt,
+  VideoRecorder,
 } from "../utils/globals.mjs";
 
-import Btn from "../components/Btn.vue";
 
 //==================================
 // Const
 //==================================
-const WIDTH      = Screen.yt_width / 2;
-const HEIGHT     = Screen.yt_height / 2;
-const FPS        = 20;
-const TOT_POINTS = 30;
-const W_SEGMENT  = WIDTH / TOT_POINTS;
+const WIDTH      = Screen.instagram_reel_width / 3;
+const HEIGHT     = Screen.instagram_reel_height / 3;
+const FPS        = 35;
+const TOT_POINTS = 100;
 
 const ctx          = ref( undefined );
 const canvas_ref   = ref( undefined );
@@ -37,25 +34,12 @@ const is_pause     = ref( false );
 const points       = ref( [] );
 const is_recording = ref( false );
 
+let video = undefined;
 let animation_frame = undefined;
-let media_recorder  = undefined;
-let video_stream    = undefined;
-let frames          = [];
-const video_src     = ref( undefined );
 
 //==================================
 // Functions
 //==================================
-function startRecording() {
-  is_recording.value = true;
-  media_recorder.start();
-}
-
-function stopRecording() {
-  is_recording.value = false;
-  media_recorder.stop();
-}
-
 function initLoop() {
   getVideoFrame();
   clearCanvas();
@@ -64,9 +48,9 @@ function initLoop() {
 }
 
 function getVideoFrame() {
-  if ( video_stream ) { 
-    video_stream.getVideoTracks()[0].requestFrame();
-   }
+  if ( video ) {
+    video.getFrame();
+  }
 }
 
 function clearCanvas() {
@@ -81,7 +65,7 @@ function drawPoints() {
     const has_bounced = bounceToBoundaries( p );
     p.x += p.moveX;
     p.y += p.moveY;
-    p.color = has_bounced ? setColor() : p.color;
+    // p.color = has_bounced ? setColor() : p.color;
     drawCircle(p);
     if ( next_p ) {
       drawLine(p, next_p);
@@ -101,9 +85,9 @@ function drawLine(p, next_p) {
 
 function setColor() {
   const rgb = {
-    red: randInt(0, 255),
-    green: randInt(0, 255),
-    blue: randInt(0, 255),
+    red: 255, //randInt(0, 255),
+    green: randInt(100, 255),
+    blue: 255, //randInt(0, 255),
   }
   return `rgb(${ rgb.red },${ rgb.green },${ rgb.blue })`;
 }
@@ -140,29 +124,29 @@ function drawCircle({ x, y, radius, color }) {
 
 function initPoints() {
   for( let i = 1; i <= TOT_POINTS; i++ ) {
-    const radius = i * 0.1618;
+    const radius = i * (1.618 /10 );
     points.value.push({
-      x: (W_SEGMENT * i) - (W_SEGMENT / 2) - i,
-      y: radius + 0.5, 
+      x: WIDTH/2,
+      y: HEIGHT - radius - 0.5, 
       radius,
-      angle: randInt(0, 360),
-      velocity: i * 0.3,
+      angle: randInt(50, 130),
+      velocity: i * 0.01,
       moveX: undefined,
       moveY: undefined,
-      color: `rgb(${randInt(0, 255)},${randInt(0, 255)},${randInt(0, 255)})`,
+      color: `rgb(255 ,${randInt(100, 255)}, 255)`,//`rgb(${randInt(0, 255)},${randInt(0, 255)},${randInt(0, 255)})`,
     });
   }
 }
 
 function initRecord() {
-  video_stream = canvas_ref.value.captureStream( FPS );
-  media_recorder = new MediaRecorder( video_stream );
-  media_recorder.ondataavailable = (e) => frames.push( e.data );
-  media_recorder.onstop = () => {
-    const blob = new Blob(frames, { 'type' : 'video/mp4' });
-    video_src.value = URL.createObjectURL(blob);
-    frames = [];
-  };
+  video = new VideoRecorder(canvas_ref.value, FPS);
+  video.initRecord();
+  is_recording.value = true;
+}
+
+function stopRecording() {
+  is_recording.value = false;
+  video.stopRecording();
 }
 
 function onkeydown(e) {
@@ -185,11 +169,12 @@ onMounted(() => {
   window.addEventListener("keydown", onkeydown);
   ctx.value = canvas_ref.value.getContext('2d');
   initPoints();
-  initRecord();
   initLoop();
+  initRecord();
 });
 
 onUnmounted(() => {
+  stopRecording();
   window.cancelAnimationFrame(animation_frame);
   window.removeEventListener("keydown", onkeydown);
 });
@@ -198,24 +183,23 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.rec-btn {
+.toast-msg {
   position: absolute;
   bottom: 12px;
-  right: 12px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 12px;
+  background-color: #222;
+  border-radius: 12px;
 }
-video {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 220px;
-  height: auto;
-  border: 1px solid #222;
-}
+
 canvas {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 2px solid #222;
-  }
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ border: 2px solid #222;
+ background-color: #eee;
+}
+
 </style>
