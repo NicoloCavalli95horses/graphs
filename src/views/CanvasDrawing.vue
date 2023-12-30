@@ -16,7 +16,7 @@ import { Canvas } from "../utils/canvasUtils.mjs";
 const WIDTH         = SCREEN_SIZE.instagram_reel_width;
 const HEIGHT        = SCREEN_SIZE.instagram_reel_height;
 const TOT_POINTS    = 100;
-// const CAN_RECORD    = true;
+const CAN_RECORD    = false;
 
 let canvas          = undefined;
 let canvas_dom_ref  = undefined;
