@@ -30,11 +30,17 @@ export function getRandomRGB() {
   return `rgb(${ rgb.red },${ rgb.green },${ rgb.blue })`;
 }
 
-function downloadFile( src, filename = 'untitled', format ) {
-  const a = document.createElement('a')
+function downloadFile(src, filename = 'untitled', format, width, height) {
+  const a = document.createElement('a');
   a.href = src;
-  a.download = `${filename}.${format}`
-  a.click()
+  a.download = `${filename}.${format}`;
+  if (width && height) {
+    a.style.width = `${width}px`;
+    a.style.height = `${height}px`;
+  }
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 
@@ -61,6 +67,11 @@ export class VideoRecorder {
     this.mediaRecorder = new MediaRecorder(this.videoStream, this.#VIDEO_OPTIONS);
     this.mediaRecorder.ondataavailable = (e) => this.frames.push(e.data);
     this.mediaRecorder.onstop = () => this.handleStop();
+    this.videoStream.getVideoTracks()[0].applyConstraints({
+      width: this.canvasRef.width,
+      height: this.canvasRef.height,
+      advanced: [{ alpha: true }]  // Enable alpha channel for transparency
+    });
     this.startRecording();
   }
 
@@ -73,15 +84,19 @@ export class VideoRecorder {
   }
 
   getFrame() {
+    this.videoStream.getVideoTracks()[0].applyConstraints({
+      width: this.canvasRef.width,
+      height: this.canvasRef.height
+    });
     this.videoStream.getVideoTracks()[0].requestFrame();
   }
 
   handleStop() {
     const blob = new Blob(this.frames, { type: 'video/mp4' });
     const href = URL.createObjectURL(blob);
-    this.frames = [];
     downloadFile(href, 'test', 'mp4');
     URL.revokeObjectURL(href);
+    this.frames = [];
   }
 }
 

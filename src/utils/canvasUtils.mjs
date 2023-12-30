@@ -1,7 +1,7 @@
 //==================================
 // Import
 //==================================
-import { randInt } from "./globals.mjs";
+import { randInt, getRandomRGB } from "./globals.mjs";
 
 //==================================
 // Classes
@@ -46,8 +46,7 @@ export class Canvas {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      border: "2px solid #222",
-      backgroundColor: "#eee",
+      backgroundColor: "transparent",
     });
   }
 
@@ -62,7 +61,7 @@ export class Canvas {
         y: this.height - radius - 0.5,
         radius: radius,
         angle: randInt(50, 130),
-        velocity: i * 0.01,
+        velocity: i * 0.1,
         moveX: undefined,
         moveY: undefined,
         color: `rgb(${randInt(0, 255)},${randInt(0, 255)},${randInt(0, 255)})`,
@@ -99,9 +98,9 @@ export class Canvas {
       point.y += point.moveY;
       // point.color = has_bounced ? getRandomRGB() : point.color;
       this.drawCircle(point);
-      if (next_point) {
-        this.drawLine({point, next_point});
-      }
+      // if (next_point) {
+        // this.drawLine({point, next_point});
+      // }
     }
   }
 
