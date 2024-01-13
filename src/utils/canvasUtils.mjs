@@ -47,6 +47,7 @@ export class Canvas {
       left: "50%",
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
+      border: "3px solid #333",
     });
   }
 
@@ -61,7 +62,7 @@ export class Canvas {
         y: this.height - radius - 0.5,
         radius: radius,
         angle: randInt(50, 130),
-        velocity: i * 0.1,
+        velocity: i * 0.02,
         moveX: undefined,
         moveY: undefined,
         color: `rgb(${randInt(0, 255)},${randInt(0, 255)},${randInt(0, 255)})`,
