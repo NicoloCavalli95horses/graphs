@@ -7,6 +7,12 @@
           <p>Experiment with Mermaid mind map graph</p>
         </div>
       </RouterLink>
+      <RouterLink to="/machinestate">
+        <div class="row">
+          <h2>State machine</h2>
+          <p>Experiment with Mermaid state machine graph</p>
+        </div>
+      </RouterLink>
     </nav>
   </template>
   

@@ -22,6 +22,11 @@ const router = createRouter({
       name: "mindmap",
       component: () => import("../views/Mindmap.vue"),
     },
+    {
+      path: "/machinestate",
+      name: "machinestate",
+      component: () => import("../views/StateMachine.vue"),
+    },
   ],
 });
 
